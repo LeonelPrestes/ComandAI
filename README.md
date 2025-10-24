@@ -1,6 +1,6 @@
 🧩 📁 Estrutura geral do projeto
 
-restaurante_offline/
+<pre>restaurante_offline/
 ├── package.json
 ├── tsconfig.json
 ├── prisma/
@@ -73,7 +73,7 @@ restaurante_offline/
 │
 ├── electron-builder.yml             # configuração para gerar instalador .exe
 ├── .env                             # variáveis locais (chave de licença, URL API)
-└── README.md
+└── README.md</pre>
 
 --
 
@@ -94,7 +94,7 @@ restaurante_offline/
 
 ☁️ 3️⃣ API Cloud
 
-comandai-cloud/
+<pre>comandai-cloud/
 ├── app/
 │   ├── api/
 │   │   ├── license/
@@ -111,7 +111,7 @@ comandai-cloud/
 │   ├── License.ts
 │   ├── Cliente.ts
 │   └── Backup.ts
-└── package.json
+└── package.json<pre>
 
 --
 
