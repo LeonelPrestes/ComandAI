@@ -4,75 +4,75 @@ restaurante_offline/
 ├── package.json
 ├── tsconfig.json
 ├── prisma/
-│ ├── schema.prisma # modelos do banco (SQLite)
-│ └── seed.ts # dados iniciais (categorias, mesas)
+│   ├── schema.prisma                # modelos do banco (SQLite)
+│   └── seed.ts                      # dados iniciais (categorias, mesas)
 │
 ├── src/
-│ ├── main/ # Processo principal do Electron
-│ │ ├── main.ts # ponto de entrada do app Electron
-│ │ ├── preload.ts # comunicação entre Electron e Next
-│ │ ├── printerService.ts # integração com impressora (SerialPort / TCP)
-│ │ ├── updater.ts # (opcional) sistema de atualização automática
-│ │ └── licenseChecker.ts # verificação de licença na nuvem
-│ │
-│ ├── renderer/ # Projeto Next.js (interface e API local)
-│ │ ├── app/ # App Router do Next
-│ │ │ ├── layout.tsx # layout principal (Header/Footer)
-│ │ │ ├── page.tsx # tela principal / login
-│ │ │ ├── garcom/
-│ │ │ │ └── page.tsx # interface do garçom
-│ │ │ ├── cozinha/
-│ │ │ │ └── page.tsx # interface da cozinha
-│ │ │ ├── caixa/
-│ │ │ │ └── page.tsx # controle de mesas e fechamento
-│ │ │ └── estoque/
-│ │ │ └── page.tsx # controle de estoque
-│ │ │
-│ │ ├── api/ # rotas internas (rodando localmente)
-│ │ │ ├── pedidos/
-│ │ │ │ └── route.ts # POST (novo pedido), GET (listar pedidos)
-│ │ │ ├── mesas/
-│ │ │ │ └── route.ts # CRUD de mesas
-│ │ │ ├── caixa/
-│ │ │ │ └── route.ts # abertura/fechamento de comandas
-│ │ │ ├── estoque/
-│ │ │ │ └── route.ts # atualização de estoque
-│ │ │ └── sync/
-│ │ │ └── route.ts # envia logs / backup para a nuvem
-│ │ │
-│ │ ├── components/ # componentes React reutilizáveis
-│ │ │ ├── Button.tsx
-│ │ │ ├── Input.tsx
-│ │ │ ├── PedidoCard.tsx
-│ │ │ ├── MesaCard.tsx
-│ │ │ └── Header.tsx
-│ │ │
-│ │ ├── context/ # contextos React
-│ │ │ ├── PedidoContext.tsx
-│ │ │ └── CaixaContext.tsx
-│ │ │
-│ │ ├── hooks/ # hooks customizados
-│ │ │ ├── usePedidos.ts
-│ │ │ └── useEstoque.ts
-│ │ │
-│ │ ├── lib/
-│ │ │ ├── db.ts # inicialização do Prisma + SQLite
-│ │ │ └── helpers.ts # utilitários gerais
-│ │ │
-│ │ ├── styles/
-│ │ │ ├── globals.css
-│ │ │ └── variables.css
-│ │ │
-│ │ └── types/
-│ │ ├── pedido.d.ts
-│ │ ├── mesa.d.ts
-│ │ └── produto.d.ts
-│ │
-│ └── assets/
-│ └── logo.png
+│   ├── main/                        # Processo principal do Electron
+│   │   ├── main.ts                  # ponto de entrada do app Electron
+│   │   ├── preload.ts               # comunicação entre Electron e Next
+│   │   ├── printerService.ts        # integração com impressora (SerialPort / TCP)
+│   │   ├── updater.ts               # (opcional) sistema de atualização automática
+│   │   └── licenseChecker.ts        # verificação de licença na nuvem
+│   │
+│   ├── renderer/                    # Projeto Next.js (interface e API local)
+│   │   ├── app/                     # App Router do Next
+│   │   │   ├── layout.tsx           # layout principal (Header/Footer)
+│   │   │   ├── page.tsx             # tela principal / login
+│   │   │   ├── garcom/
+│   │   │   │   └── page.tsx         # interface do garçom
+│   │   │   ├── cozinha/
+│   │   │   │   └── page.tsx         # interface da cozinha
+│   │   │   ├── caixa/
+│   │   │   │   └── page.tsx         # controle de mesas e fechamento
+│   │   │   └── estoque/
+│   │   │       └── page.tsx         # controle de estoque
+│   │   │
+│   │   ├── api/                     # rotas internas (rodando localmente)
+│   │   │   ├── pedidos/
+│   │   │   │   └── route.ts         # POST (novo pedido), GET (listar pedidos)
+│   │   │   ├── mesas/
+│   │   │   │   └── route.ts         # CRUD de mesas
+│   │   │   ├── caixa/
+│   │   │   │   └── route.ts         # abertura/fechamento de comandas
+│   │   │   ├── estoque/
+│   │   │   │   └── route.ts         # atualização de estoque
+│   │   │   └── sync/
+│   │   │       └── route.ts         # envia logs / backup para a nuvem
+│   │   │
+│   │   ├── components/              # componentes React reutilizáveis
+│   │   │   ├── Button.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── PedidoCard.tsx
+│   │   │   ├── MesaCard.tsx
+│   │   │   └── Header.tsx
+│   │   │
+│   │   ├── context/                 # contextos React
+│   │   │   ├── PedidoContext.tsx
+│   │   │   └── CaixaContext.tsx
+│   │   │
+│   │   ├── hooks/                   # hooks customizados
+│   │   │   ├── usePedidos.ts
+│   │   │   └── useEstoque.ts
+│   │   │
+│   │   ├── lib/
+│   │   │   ├── db.ts                # inicialização do Prisma + SQLite
+│   │   │   └── helpers.ts           # utilitários gerais
+│   │   │
+│   │   ├── styles/
+│   │   │   ├── globals.css
+│   │   │   └── variables.css
+│   │   │
+│   │   └── types/
+│   │       ├── pedido.d.ts
+│   │       ├── mesa.d.ts
+│   │       └── produto.d.ts
+│   │
+│   └── assets/
+│       └── logo.png
 │
-├── electron-builder.yml # configuração para gerar instalador .exe
-├── .env # variáveis locais (chave de licença, URL API)
+├── electron-builder.yml             # configuração para gerar instalador .exe
+├── .env                             # variáveis locais (chave de licença, URL API)
 └── README.md
 
 --
