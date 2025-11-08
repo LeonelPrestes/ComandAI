@@ -1,12 +1,10 @@
-import Mesa from "./componets/mesa"
+import MesaGrid from "@/src/modules/comanda/components/MesaGrid";
 
-export default function Garcom () {
-    const setor = "Varanda"
-    return (
-        <div className="p-2">
-            <h1 className="text-3xl mb-5">Mesas - {setor}</h1>
-            <Mesa />
-
-        </div>
-    )
+export default function GarcomPage() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <h1 className="text-3xl font-bold p-4">Mesas</h1>
+      <MesaGrid />
+    </div>
+  );
 }

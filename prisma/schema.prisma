@@ -1,0 +1,282 @@
+// ------------------------------------------------------
+// COMANDAI - Versão v4 (otimizada para SQLite + Prisma)
+// ------------------------------------------------------
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------
+// STATUS DAS MESAS
+// ------------------------------------------------------
+model status_mesa {
+  id         Int      @id @default(autoincrement())
+  nome       String   @unique
+  cor        String?
+  descricao  String?
+  mesas      mesa[]
+
+  @@map("status_mesa")
+}
+
+// ------------------------------------------------------
+// MESA FÍSICA
+// ------------------------------------------------------
+model mesa {
+  id                  Int           @id @default(autoincrement())
+  numero              Int           @unique
+  status_id           Int
+  capacidade          Int?
+  ativa               Boolean       @default(true)
+  observacoes         String?
+  tempo_total_ocupada Int?
+  total_ocupacoes     Int?
+  comandas            comanda[]
+  status              status_mesa   @relation(fields: [status_id], references: [id])
+
+  @@map("mesa")
+}
+
+// ------------------------------------------------------
+// STATUS DAS COMANDAS
+// ------------------------------------------------------
+model status_comanda {
+  id         Int       @id @default(autoincrement())
+  nome       String    @unique
+  cor        String?
+  descricao  String?
+  comandas   comanda[]
+
+  @@map("status_comanda")
+}     
+
+// ------------------------------------------------------
+// CLIENTE
+// ------------------------------------------------------
+model cliente {
+  id           Int       @id @default(autoincrement())
+  nome         String
+  telefone     String?
+  endereco     String?
+  email        String?
+  observacoes  String?
+  ativo        Boolean    @default(true)
+  comandas     comanda[]
+
+  @@map("cliente")
+}
+
+// ------------------------------------------------------
+// GARÇOM
+// ------------------------------------------------------
+model garcom {
+  id         Int       @id @default(autoincrement())
+  nome       String    @unique
+  telefone   String?
+  ativo      Boolean   @default(true)
+  comandas   comanda[]
+  pedidos    pedido[]
+
+  @@map("garcom")
+}
+
+// ------------------------------------------------------
+// COMANDA
+// ------------------------------------------------------
+model comanda {
+  id             Int             @id @default(autoincrement())
+  mesa_id        Int
+  cliente_id     Int?
+  garcom_id      Int?
+  status_id      Int
+  aberto_em      DateTime        @default(now())
+  fechado_em     DateTime?
+  tempo_ocupada  Int?
+  pessoas        Int?
+  valor_total    Float?
+  observacoes    String?
+  mesa           mesa            @relation(fields: [mesa_id], references: [id])
+  cliente        cliente?        @relation(fields: [cliente_id], references: [id])
+  garcom         garcom?         @relation(fields: [garcom_id], references: [id])
+  status         status_comanda  @relation(fields: [status_id], references: [id])
+  pedidos        pedido[]
+
+  @@map("comanda")
+}
+
+// ------------------------------------------------------
+// CARDÁPIO
+// ------------------------------------------------------
+enum TipoCardapio {
+  SEMANA
+  FDS
+}
+
+model cardapio {
+  id           Int              @id @default(autoincrement())
+  nome         String
+  descricao    String?
+  ativo        Boolean          @default(true)
+  data_inicio  DateTime?
+  data_fim     DateTime?
+  tipo         TipoCardapio     @default(SEMANA) @unique
+  produtos     produto[]
+}
+// ------------------------------------------------------
+// CATEGORIA PRODUTO
+// ------------------------------------------------------
+model categoria_produto {
+  id               Int       @id @default(autoincrement())
+  nome             String    @unique
+  descricao        String?
+  ordem_exibicao   Int?
+  produtos         produto[]
+
+  @@map("categoria_produto")
+}
+
+// ------------------------------------------------------
+// PRODUTO
+// ------------------------------------------------------
+model produto {
+  id             Int                @id @default(autoincrement())
+  nome           String             @unique
+  preco          Float
+  preco_meia     Float?
+  aceita_meia    Boolean            @default(false)
+  categoria_id   Int?
+  cardapio_id    Int?
+  ativo          Boolean            @default(true)
+  descricao      String?
+  categoria      categoria_produto? @relation(fields: [categoria_id], references: [id])
+  cardapio       cardapio?          @relation(fields: [cardapio_id], references: [id])
+  itens          itens_do_pedido[]
+  ingredientes   produto_ingrediente[]
+
+  @@map("produto")
+}
+
+// ------------------------------------------------------
+// PEDIDO
+// ------------------------------------------------------
+model pedido {
+  id            Int        @id @default(autoincrement())
+  comanda_id    Int
+  garcom_id     Int?
+  data_hora     DateTime   @default(now())
+  status        String     @default("pendente")
+  valor_total   Float?
+  observacoes   String?
+  comanda       comanda    @relation(fields: [comanda_id], references: [id])
+  garcom        garcom?    @relation(fields: [garcom_id], references: [id])
+  itens         itens_do_pedido[]
+
+  @@map("pedido")
+}
+
+// ------------------------------------------------------
+// ITENS DO PEDIDO
+// ------------------------------------------------------
+model itens_do_pedido {
+  id               Int        @id @default(autoincrement())
+  pedido_id        Int
+  produto_id       Int
+  quantidade       Int        @default(1)
+  preco_unitario   Float?
+  subtotal         Float?
+  adicionais       String?
+  pedido           pedido     @relation(fields: [pedido_id], references: [id])
+  produto          produto    @relation(fields: [produto_id], references: [id])
+  adicionaisItens  item_pedido_adicional[]
+
+  @@map("itens_do_pedido")
+}
+
+// ------------------------------------------------------
+// ADICIONAIS
+// ------------------------------------------------------
+model adicionais {
+  id          Int                   @id @default(autoincrement())
+  nome        String                @unique
+  preco       Float?
+  ativo       Boolean                @default(true)
+  itensAd     item_pedido_adicional[]
+  ingredientes adicional_ingrediente[]
+
+  @@map("adicionais")
+}
+
+// ------------------------------------------------------
+// ITEM PEDIDO ADICIONAL
+// ------------------------------------------------------
+model item_pedido_adicional {
+  id             Int         @id @default(autoincrement())
+  item_pedido_id Int
+  adicional_id   Int
+  quantidade     Int         @default(1)
+  itemPedido     itens_do_pedido @relation(fields: [item_pedido_id], references: [id])
+  adicional      adicionais      @relation(fields: [adicional_id], references: [id])
+
+  @@map("item_pedido_adicional")
+}
+
+// ------------------------------------------------------
+// UNIDADE DE MEDIDA
+// ------------------------------------------------------
+model unidade_medida {
+  id       Int          @id @default(autoincrement())
+  nome     String       @unique
+  sigla    String       @unique
+  ingredientes ingredientes[]
+
+  @@map("unidade_medida")
+}
+
+// ------------------------------------------------------
+// INGREDIENTES
+// ------------------------------------------------------
+model ingredientes {
+  id            Int                 @id @default(autoincrement())
+  nome          String              @unique
+  quantidade    Float?
+  unidade_id    Int?
+  ativo         Boolean             @default(true)
+  unidade       unidade_medida?     @relation(fields: [unidade_id], references: [id])
+  produtos      produto_ingrediente[]
+  adicionais    adicional_ingrediente[]
+
+  @@map("ingredientes")
+}
+
+// ------------------------------------------------------
+// PRODUTO_INGREDIENTE
+// ------------------------------------------------------
+model produto_ingrediente {
+  id             Int          @id @default(autoincrement())
+  produto_id     Int
+  ingrediente_id Int
+  quantidade     Float?
+  produto        produto      @relation(fields: [produto_id], references: [id])
+  ingrediente    ingredientes @relation(fields: [ingrediente_id], references: [id])
+
+  @@map("produto_ingrediente")
+}
+
+// ------------------------------------------------------
+// ADICIONAL_INGREDIENTE
+// ------------------------------------------------------
+model adicional_ingrediente {
+  id             Int          @id @default(autoincrement())
+  adicional_id   Int
+  ingrediente_id Int
+  quantidade     Float?
+  adicional      adicionais   @relation(fields: [adicional_id], references: [id])
+  ingrediente    ingredientes @relation(fields: [ingrediente_id], references: [id])
+
+  @@map("adicional_ingrediente")
+}
