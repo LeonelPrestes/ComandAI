@@ -1,8 +1,6 @@
 import { prisma } from "@/src/lib/prisma/client";
 
-/**
- * 🔹 Abre uma comanda nova ou retorna a existente, se a mesa já estiver ocupada.
- */
+// Abre uma comanda nova ou retorna a existente, se a mesa já estiver ocupada.
 export async function abrirOuRetomarComanda(mesaId: number, garcomId: number = 1) {
   // Encontra status "aberta"
   const statusAberta = await prisma.status_comanda.findFirst({
@@ -48,9 +46,7 @@ export async function abrirOuRetomarComanda(mesaId: number, garcomId: number = 1
   return comanda;
 }
 
-/**
- * 🔹 Fecha uma comanda e libera a mesa.
- */
+// Fecha uma comanda e libera a mesa.
 export async function fecharComanda(mesaId: number) {
   const statusFechada = await prisma.status_comanda.findFirst({
     where: { nome: "fechada" },
@@ -85,3 +81,4 @@ export async function fecharComanda(mesaId: number) {
 
   return { message: "Mesa e comanda fechadas com sucesso!" };
 }
+/*Bom, liguei minha impressora tanto via USB quanto via LAN, na LAN, ela está ligada diretamente no roteador. A porta que encontrei da impressora foi 192.168.2.114:9100 Além de tbm está ligada ao USB. Então vamos criar esses 3 arquivos para conseguir fazer uma impressão de teste... */

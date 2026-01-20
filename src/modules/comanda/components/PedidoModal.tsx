@@ -125,7 +125,12 @@ export default function PedidoModal({ comandaId, garcomId, onClose }: Props) {
 
       if (!res.ok) throw new Error("Erro ao enviar pedido");
 
-      alert("✅ Pedido enviado com sucesso!");
+      const data = await res.json();
+      if (data?.printError) {
+        alert("Pedido enviado, mas houve erro ao imprimir.");
+      } else {
+        alert("✅ Pedido enviado com sucesso!");
+      }
       setItens([]);
       onClose();
     } catch (error) {
